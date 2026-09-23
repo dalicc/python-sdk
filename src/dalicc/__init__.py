@@ -23,8 +23,10 @@ translation assistant need a personal API token from ``/account/tokens``, passed
 The full reference, with an example per method, is ``docs/SDK.md`` in the DALICC
 repository and https://dalicc.net/documentation/sdk on the site.
 
-This package is licensed AGPL-3.0-only, with a commercial licence available from the
-association (``tassilo.pellegrini@ustp.at`` or ``giray.havur@ustp.at``). Nothing it
+This package is licensed Apache-2.0, although the DALICC service itself is
+AGPL-3.0-only: a client that only talks to a public API has no reason to carry the
+service's terms with it. See LICENSE and NOTICE. Questions go to the association
+(``tassilo.pellegrini@ustp.at`` or ``giray.havur@ustp.at``). Nothing this client
 returns is legal advice.
 """
 
@@ -76,7 +78,7 @@ from dalicc.models import (
 from dalicc.pagination import paginate
 
 #: Kept in step with the DALICC service it speaks to; see ``docs/SDK.md``.
-__version__ = "2.0.0.dev0"
+__version__ = "2.0.0rc1"
 
 __all__ = [
     "DEFAULT_BASE_URL",
