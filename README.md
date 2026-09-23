@@ -79,12 +79,16 @@ identifier, `5` the request was refused, `6` a rate limit or a quota.
 
 ## Documentation
 
-The full reference, with an example for every method, the error and rate-limit model and
-the command line reference, is at
-[dalicc.net/documentation/sdk](https://dalicc.net/documentation/sdk). The endpoints it
-calls are described in
-[the API reference](https://dalicc.net/documentation/api), and everything else is in
-[the documentation index](https://dalicc.net/documentation).
+The endpoints this client calls are documented, with every parameter and every status
+code, at [api.dalicc.net/docs](https://api.dalicc.net/docs), which is the live API and
+answers today.
+
+The full client reference, with an example for every method, the error and rate-limit
+model and the command line reference, belongs on the DALICC website at
+[dalicc.net/documentation](https://dalicc.net/documentation). That site is being moved to
+the current generation of DALICC; until it is done, `https://dalicc.net` redirects to the
+API documentation above, and this page and the docstrings in the package are the
+reference.
 
 ## Development
 
