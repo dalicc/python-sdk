@@ -1,0 +1,59 @@
+# Publish the client to PyPI when a version tag is pushed.
+#
+# There is no API token anywhere. PyPI's trusted publishing is used instead: the PyPI
+# project is configured once with this repository, this workflow file and the
+# environment named below as its publisher, and the upload is authorised by the short
+# lived OpenID Connect token GitHub mints for the job. Until that registration is done
+# the job fails at the upload step and nothing else happens.
+#
+# To cut a release: set the version in pyproject.toml, move the Unreleased section of
+# CHANGELOG.md under that version, commit, then push the tag.
+#
+#   git tag -a v2.0.0 -m "dalicc 2.0.0"
+#   git push origin v2.0.0
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build and check the distributions
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+
+  publish:
+    name: publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

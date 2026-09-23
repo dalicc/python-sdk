@@ -1,0 +1,59 @@
+# The client's own suite, on the Python versions the package supports.
+#
+# Most of the suite runs the client against the DALICC application in the same process,
+# which only works in the service repository where the client is developed. Those tests
+# skip themselves here and say so; what runs here is everything that needs no service:
+# the models, the paging, the identifier handling, the error mapping, the rate-limit
+# headers and the transport, driven by a mock transport.
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install the client and its test dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run the tests
+        run: python -m pytest
+
+      - name: Lint
+        run: ruff check .
+
+  build:
+    name: build the distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build and check the wheel and the sdist
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
