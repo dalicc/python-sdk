@@ -1,0 +1,9 @@
+# The suite runs the client against the DALICC application in the same process and
+# uses that repository's fixtures (see tests/conftest.py), so it cannot run from
+# an unpacked distribution. It stays in the repository rather than in the sdist.
+prune tests
+
+# The changelog of the package, which the sdist should carry beside the licence, the
+# NOTICE and the README. A wheel has nowhere to put it: the only project-root files a
+# wheel carries are the ones named in `license-files`, and a changelog is not one.
+include CHANGELOG.md

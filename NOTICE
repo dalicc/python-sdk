@@ -1,0 +1,19 @@
+DALICC Python client, Copyright 2026 DALICC - Verein zur Foerderung der Rechtssicherheit in der Datenbewirtschaftung
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. A copy of the License is in the file
+LICENSE, and it is also available at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the specific language governing
+permissions and limitations under the License.
+
+This package is a client only. It speaks the public DALICC API over HTTP and carries no
+license data of its own: the DALICC license library, the dependency graph and the
+vocabulary stay on the service, are published under CC BY 4.0, and nothing in this
+package redistributes them. The DALICC service itself is licensed under AGPL-3.0-only,
+which this client does not carry either.
+
+Questions, and anything that needs a binding answer, go to tassilo.pellegrini@ustp.at or
+giray.havur@ustp.at.

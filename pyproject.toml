@@ -1,0 +1,108 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2021-2026 DALICC - Verein zur Foerderung der Rechtssicherheit in der Datenbewirtschaftung (ZVR 1249185710)
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dalicc"
+version = "2.0.0.dev0"
+description = "Python client and command line interface for the DALICC API"
+readme = "README.md"
+requires-python = ">=3.10"
+# Apache-2.0, and not the AGPL-3.0-only of the rest of the DALICC repository. The
+# association decided this on 2026-09-23: a client that only talks to a public API has
+# no reason to carry the service's terms with it, and a permissive licence is what
+# people expect of an API client and what lets them link it into their own tooling.
+# See LICENSE, NOTICE and ../LICENSING.md.
+license = "Apache-2.0"
+# NOTICE is a licence file too: section 4(d) of Apache-2.0 obliges anyone who
+# redistributes this package to pass it on, and listing it here is what puts it
+# next to LICENSE in the sdist and in the wheel.
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+    { name = "DALICC - Verein zur Foerderung der Rechtssicherheit in der Datenbewirtschaftung", email = "giray.havur@ustp.at" },
+]
+keywords = ["license", "licensing", "odrl", "rdf", "compatibility", "dalicc"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    # No "License :: OSI Approved :: ..." classifier: setuptools refuses to build a
+    # package that carries one beside a PEP 639 `license` expression, and the expression
+    # above is what a package index reads.
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["httpx>=0.27"]
+
+[project.urls]
+Homepage = "https://dalicc.net"
+Documentation = "https://dalicc.net/documentation"
+Repository = "https://github.com/dalicc/python-sdk"
+
+[project.scripts]
+dalicc = "dalicc.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "respx>=0.21", "ruff>=0.5"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dalicc = ["py.typed"]
+
+# ---------------------------------------------------------------------------
+# tooling
+#
+# ruff resolves its configuration per file, so `ruff check sdk` (and the repository
+# wide `ruff check .`) lints this tree with the settings below and the rest of the
+# repository with the ones in ../pyproject.toml.
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = ["dist", "build"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "C4", "T20", "SIM", "RUF", "D"]
+ignore = [
+    "D104",    # package docstring
+    "D203",    # incompatible with D211
+    "D213",    # incompatible with D212
+    "D401",    # imperative mood is not always the clearest phrasing
+    "D417",    # the method docstrings are prose, not parameter tables
+    "UP006",   # the package supports Python 3.10; keep typing spellings conservative
+    "UP007",
+    "UP045",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# A command line interface writes to stdout; that is what it is for.
+"src/dalicc/cli.py" = ["T201"]
+# A test that opens a client and then expects an exception reads better as two
+# nested `with` blocks than as one line of contexts, so SIM117 is off here.
+"tests/*" = ["D100", "D103", "S101", "SIM117"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["dalicc"]
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
